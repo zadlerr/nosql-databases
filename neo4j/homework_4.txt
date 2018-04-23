@@ -5,3 +5,34 @@
 // If you'd like to test your commands, you can run 'cat homework_4.txt | cypher-shell -u neo4j -p test' from
 // the vagrant box command line. Make sure neo4j is running first.
 // CREATE (a:person { name: 't' });
+
+// I am modeling my Family Tree.
+
+//nodes
+CREATE (Marisa:Person {name:'Marisa', EyeColor:'Blue'});
+CREATE (Brian: Person{name:'Brian', EyeColor:'Brown'});
+CREATE (Zach:Person {name:'Zach', EyeColor:'Brown’});
+CREATE (Syd:Person {name:'Syd', EyeColor:'Brown'});
+CREATE (Max:Person {name:'Max', EyeColor:'Brown'});
+CREATE (Luc:Person {name:'Luc', EyeColor:'Blue'});
+CREATE (Irma:Person {name:'Irma', EyeColor:'Brown'});
+CREATE (Giuliano:Person {name:'Giuliano', EyeColor:'Blue'});
+
+//relationships
+MATCH (a:Person),(b:Person) WHERE a.name='Marisa' AND b.name='Brian' CREATE (a)-[r:MARRIED_TO]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Marisa' AND b.name='Zach' CREATE (a)-[r:PARENT_OF]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Marisa' AND b.name='Syd' CREATE (a)-[r:PARENT_OF]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Marisa' AND b.name='Max' CREATE (a)-[r:PARENT_OF{since:2004}]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Marisa' AND b.name='Luc' CREATE (a)-[r:PARENT_OF{since:2004}]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Brian' AND b.name='Max' CREATE (a)-[r:PARENT_OF{since:2004}]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Brian' AND b.name='Zach' CREATE (a)-[r:PARENT_OF{since:1996}]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Brian' AND b.name='Syd' CREATE (a)-[r:PARENT_OF{since:1998}]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Brian' AND b.name='Luc' CREATE (a)-[r:PARENT_OF]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Irma' AND b.name='Giuliano' CREATE (a)-[r:MARRIED_TO]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Irma' AND b.name='Marisa' CREATE (a)-[r:PARENTS_OF{since:1965}]->(b);
+MATCH (a:Person),(b:Person) WHERE a.name='Giuliano' AND b.name='Marisa' CREATE (a)-[r:PARENT_OF]->(b);
+
+// QUERIES
+
+MATCH(a:Person {name:'Marisa'})<-[:PARENT_OF]-(person) RETURN person.name;
+MATCH(a:Person {name:'Marisa'})-[:PARENT_OF]->(person) RETURN person.name;
