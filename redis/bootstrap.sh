@@ -5,6 +5,7 @@ function install_rvm_and_ruby() {
   su - vagrant -c "curl -sSL https://get.rvm.io | bash -s $1"
   source $HOME/.rvm/scripts/rvm
   su - vagrant -c "rvm install ruby-2.5.0"
+  su - vagrant -c "gem install redis"
 }
 
 function install_nodejs() {
@@ -23,10 +24,18 @@ function install_java_8() {
 
 function install_redis() {
   apt-get update
+  apt-get install -y redis-server
   apt-get install -y redis-tools
+
+}
+
+function setup_python {
+  apt-get update
+  apt-get install -y python-pip
 }
 
 install_nodejs
 install_rvm_and_ruby
+setup_python
 install_redis
 
